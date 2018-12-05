@@ -3,11 +3,89 @@
     <title>TETRIS Llorente</title>
     <meta http equiv="Content­Type" content="text/html;charset=iso­8859­1" />
 </head>
-
+<style type="text/css">
+    .Mapa{
+             border-collapse: collapse;
+        }
+      
+</style>
 
 <script>
 //INICIAR EL CODI
+//DECLAREM LES VARIABLES PRINCIPALS
+var Tauler; //Matriu del tauler
+var Peca = 0; //Contador de peça a 0
+var FilaP; //Fila de la peça
+var ColumnP; //Columna de la peça
+var RotacioP; //Rotacio de la peça
+var Record = 0; //Puntuacio Record
+var ComL = 0; //Puntuacio de las lineas
+var pos = [  
+              [0 , 0],
+              [0 , 1],
+              [-1 , 0],
+              [1 , 0],
+              [-1 , -1],
+              [0 , -1],
+              [1 , -1],
+              [0 , -2]
+]; // Valor on estan els limits
 
+//Funcio per iniciar el Joc a Carregar el HTML
+function Tetris (){
+    IniciJoc();
+    setTimeout(); //FALTA AFEGIR EL VALOR PER QUE FUNCIONI
+}
+
+//Funcio per iniciar el joc I reinici d'aquest
+function IniciJoc(){
+        Moviment(); //PER CREAR
+        Pintar();
+        setTimeout(); // VELOCITAT DEL JOC Y CARREGA
+    }
+
+
+//Dibuixar el espai del joc
+function Pintar (){
+    var Espai = " <";
+    var Canvi;
+    var Fila;
+    var Col;
+    var Mapa = "<table class = 'Mapa'>";
+    var ColorPeces = Tauler [Fila][Col];
+    
+    for (Fila = 1; Fila < 25; Fila++){
+        Mapa += "<tr>";
+    }
+    
+    for (Col = 0; Col < 10; Col++){
+        
+    }
+    document.getElementById('Mapa').innerHTML = Mapa;
+    
+}
+
+// Declaracio de l'objecte peça
+var Peca = function(forma, color, Fila, Colum, Rot)
+        { this.forma = forma;
+          this.color = color;
+          this.Fila = Fila;  
+          this.Colum = Colum;
+          this.Rot = Rot;
+          };
+
+// Generar una PecaAleatoria y creacio de les peces
+function GeneraPecaAleatoria() { 
+    var peces = [[[[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]],"groc"],
+                [[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"],
+                [[[0, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0]], "verd"],
+                [[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "roig"],
+                [[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "blau"],
+                [[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "taronga"],
+                [[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morat"]]
+    var numeroAleatori = Math.round(Math.random() * 6);
+    return peces[numeroAleatori];
+}
 
 </script>
 
