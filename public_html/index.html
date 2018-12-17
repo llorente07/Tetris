@@ -4,149 +4,197 @@
         <meta http equiv="Content­Type" content="text/html;charset=iso­8859­1" />
     </head>
     <style type="text/css">
-        .Mapa{
-            border-collapse: collapse;
-        }
+    
+    .Mapa{
+        border-collapse: collapse;
+}
+    
+    .Mapa fila col{
+        width:20px;
+        height:20px;
+        padding: 0px;
+}
 
     </style>
 
     <script>
 //INICIAR EL CODI
 //DECLAREM LES VARIABLES PRINCIPALS
-    var Tauler
-    var Pecaa = 0; //Contador de peça a 0
-    var FilaP; //Fila de la peça
-    var ColumnP; //Columna de la peça
-    var RotacioP; //Rotacio de la peça
-    var Record = 0; //Puntuacio Record
-    var ComL = 0; //Puntuacio de las lineas
-    var pos = [
+        var Tauler;
+        var Pecaa = 0; //Contador de peça a 0
+        var FilaP; //Fila de la peça
+        var ColumnP; //Columna de la peça
+        var RotacioP; //Rotacio de la peça
+        var Record = 0; //Puntuacio Record
+        var ComL = 0; //Puntuacio de las lineas
+        var pos = [
         [0, 0],
         [0, 1],
-        [-1, 0],
+        [ - 1, 0],
         [1, 0],
-        [-1, -1],
-        [0, -1],
-        [1, -1],
-        [0, -2]
-    ]; // Valor on estan els limits
+        [ - 1, - 1],
+        [0, - 1],
+        [1, - 1],
+        [0, - 2]
+        ]; // Valor on estan els limits
 
-//Funcio per iniciar el Joc a Carregar el HTML
-    function Tetris() {
+        // Disseny de les peces.
+        var peces = [
+        [4, 0, 1, 2, 3],
+        [4, 0, 1, 5, 6],
+        [4, 0, 1, 5, 4],
+        [2, 0, 1, 5, 7],
+        [2, 0, 2, 5, 6],
+        [2, 0, 3, 5, 4],
+        [1, 0, 5, 6, 3]
+        ];
+        
+//FUNCIO PER GENERAR LA PEÇA ALETORIAMENT
+function nuevaPieza(){
+        ColumnP = 5; //COLUMNA ON LA PEÇA ES COLOCARA PER COMENÇAR
+        FilaP = 0;
+        RotacioP = 0; 
+        Pecaa = Math.floor(Math.random()*7);
+}
+        
+//FUNCIO PER INCIAR EL JOC I CARREGAR EL HTML
+function Tetris() {
         IniciJoc();
         setTimeout(); //FALTA AFEGIR EL VALOR PER QUE FUNCIONI
-    }
+        }
 
-//Funcio per iniciar el joc I reinici d'aquest
-    function IniciJoc() {
+//FUNCIO PER INICIAR EL JOC I REINICIAR
+function IniciJoc() {
         Moviment(); //PER CREAR
         Pintar();
         setTimeout(); // VELOCITAT DEL JOC Y CARREGA
-    }
+        }
 
-//Generar el tauler sense pintar
-    function GenerarTauler() {
+//GENERACIO DEL TAULER
+function GenerarTauler() {
         Tauler = new Array(25);
-        for (var y = 0; y < 25; y++) {
-            Tauler [y] = new Array(10);
-            for (var x = 0; x < 10; x++) {
-                Tauler [y][x] = 0;
-            }
+        for (var y = 0; y < 24; y++) {
+        Tauler [y] = new Array(10);
+        for (var x = 0; x < 9; x++) {
+        Tauler [y][x] = 0;
         }
-
     }
-
-//Dibuixar el espai del joc
-    Peça.prototype.pintar = function ()
-    {
-        var resultat = "<table border='1'>";
-        for (var i = 0; i < this.forma.length; i++)
-        {
-            resultat = resultat + "<tr>"
-            for (var j = 0; j < this.forma[i].length; j++)
-            {
-                resultat = resultat + "<td>";
-                if (this.forma[i][j] == 1) {
-                    resultat = resultat + "X"
-                } else {
-                    resultat = resultat + "-"
-                }
-                ;
-                resultat = resultat + "</td>";
-            }
-            resultat = resultat + "</tr>";
-        }
-        resultat = resultat + "</table>";
-        return resultat
-    };       
-
-
-
-// Declaracio de l'objecte peça
-var Peca = function(forma, color)
-        { this.forma = forma;
-          this.color = color;
-          
-          };
-
-// Generar una PecaAleatoria y creacio de les peces
-function GeneraPecaAleatoria() { 
-    var peces = [[[[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]],"groc"],
-                [[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"],
-                [[[0, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0]], "verd"],
-                [[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "roig"],
-                [[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "blau"],
-                [[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "taronga"],
-                [[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morat"]]
-    var numeroAleatori = Math.round(Math.random() * 6);
-    return peces[numeroAleatori];
 }
-
+     
 //MOURE LA PEÇA LATERALMENT PER ALS DOS COSTATS
-//FALTARA UNA FUNCIO PER COMPROBAR ElS LIMIT DELS DOS COSTATS Y SI HI HA PEÇAS
 function MourePecaLateral() {
-    ColumnP += Mur;
-        // if (COLISION){
-            ColumnP -= Mur;
-  //}          
+        ColumnP += Mur;
+        if (ColisioPeca){
+        ColumnP -= Mur;
+    }
 }
 
 //ROTACIO DE LA PEÇA, LA PEÇA COMENZA A LA POS 0
 function RotacioPeca(){
-    RotacioP = RotacioP + 1;
-        if (RotacioP == peces [Pecaa] [0]){
+        RotacioP = RotacioP + 1;
+            if (RotacioP == peces [Pecaa] [0]){
             RotacioP = 0;
         }
+        
         // SI COLISIONA NO POT ROTAR LA PEÇA
         if (ColisioPeca()){
-            RotacioP = RotacioP -1;
-            if (RotacioP == -1){
-                RotacioP = peces [Pecaa] [0] -1;
+        RotacioP = RotacioP - 1;
+            if (RotacioP == - 1){
+            RotacioP = peces [Pecaa] [0] - 1;
         }
     }
 }
 
+//FUNCIO PER PINTAR EL MAPA
+
+function Dibuijar (){
+        var Espai = " <";
+        var Mur;
+        var Div = "<table class = 'Mapa'>";
+            for (var X = 0; X < 25; X++){
+            Div += "<fila>";
+                for (var Y = 0; Y < 10; Y++){
+                var Fondo = Tauler [X][Y];
+                    if(Fondo == 0){
+                        for (i = 1; i < 5; i++){
+                            Mur = peces [Pecaa][i];
+                            var Pos2 = Rotacio (pos[Mur]);
+                                if (X == FilaP + Pos2[0] && Y == ColumnP + Pos2[1]){
+                                Fondo = Pecaa +1;    
+                    }
+                }
+            }
+            Div += "<col class='Figura" + Fondo + " '/>";
+        }
+        Div = Espai + "/fila>";
+    }
+    Div = Espai + "/Mapa>";
+    
+    document.getElementById ('Mapa').innerHTML = Div;
+}
+
+//NO FUNCIO ALGUNA COSAS FALTA ARREGLAR 
 //FUNCIO PER BAIXAR LA PEÇA 
-function BaixarPeca {
-    FilaP = FilaP + 1;
-    // FALTA FUNCIO PER LA COLISIO if (ColisioPeca()){
-        FilaP = FilaP -1;
-        for (i = 1; i < 5; i++){
-            var Pos2 = RotacioPeca (pos[]);
-            
-            if (pos [0] FilaP >= 0 && Pos2 [0] + FilaP < 25 && 0.Buffer
-                pos [1] ColumnP >= 0 && Pos2 [1] + ColumnP < 10){
-            Tauler [Pos2[0] + FilaP] [Pos2 [1] + ColumnP] = Pecaa + 1;
+//function BaixarPeca (){
+       // FilaP = FilaP + 1;
+      //  if (ColisioPeca()){
+       // FilaP = FilaP - 1;
+       // for (i = 1; i < 5; i++){
+ //var Pos2 = RotacioPeca (pos[]);
+       //if (pos [0] FilaP >= 0 && Pos2 [0] + FilaP < 25 && 0.Buffer
+                //pos [1] ColumnP >= 0 && Pos2 [1] + ColumnP < 10){
+           // Tauler [Pos2[0] + FilaP] [Pos2 [1] + ColumnP] = Pecaa + 1;
+   // }
+   // }
+  //  }
+    
+
+//FUNCIO PER COMPROBAR SI LA PEÇA COLISIONA AMB EL LIMITS DEL MAPA O AMB UNA ALTRE PEÇA 
+
+function ColisioPeca (){
+        for (var i = 1; i < 5; i ++){
+            var Mur = peces [Pecaa] [i];
+            var Pos2 = Rotar (Pos[Mur]);
+                if (Pos2 [0] + FilaP, Pos2 [1] + ColumnP){
+                return true;
         }
     }
+    return false;
 }
 
-function ColisioPeca {
+//FUNCIO PER ROTAR LA PEÇA
+function Rotacio (Rota) {
+        var Pos2 = [ Rota [0] , Rota [1] ];
+            for (var i = 0; i < RotacioP ;i ++){
+                var X = Pos2 [ 1 ]; 
+                var Y = -Pos2 [ 0 ] ;
+            
+            Pos2 [ 0 ] = X;
+            Pos2 [ 1 ] = Y;
+        }
+        
+    return Pos2;
+}
+
+//DETECTA SI LA POSISICO ESTA LLIURE PER PODER SER OCUPADA
+function PosNo (X, Y){
+    if (X < 0) return false;
+    return (Y < 0 || Y >= 9 || X >= 24 || Tauler[X][Y] > 0;)
     
 }
-</script>
 
-<body> 
-</body>
+//FUNCIO PER DETECTAR I CONTAR LES LINEAS FETAS
+function Lineas(){
+    
+}
+
+//FUNCIA PER UTILIZAR EL TECLAT
+function Teclat (){
+    
+}
+      
+    </script>
+    <body onload='Tetris()' onkeydown = "TECLAT(event)"> 
+    </body>
 </html>
 
