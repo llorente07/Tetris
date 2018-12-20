@@ -7,6 +7,20 @@
     
     .Mapa{
         border-collapse: collapse;
+        position: absolute;
+        /* MIG DEL NAVEGADOR */
+        top:50%;
+	left:50%;
+	/* AMPLADA */
+        width:400px;
+        /* MARGE ESQUERRA / AMPLADA */
+        margin-left:-200px;
+	/* ALTURA */
+	height:300px;
+	/* MARGE SUPERIOR / (MITAD / ALTURA) */
+	margin-top:-150px;
+	border:1px solid #808080;
+	padding:5px;
 }
     
     .Mapa fila col{
@@ -25,7 +39,7 @@
         var FilaP; //Fila de la peça
         var ColumnP; //Columna de la peça
         var RotacioP; //Rotacio de la peça
-        var Record = 0; //Puntuacio Record
+        var TOP = 0; //Puntuacio Record
         var ComL = 0; //Puntuacio de las lineas
         var pos = [
         [0, 0],
@@ -50,7 +64,7 @@
         ];
         
 //FUNCIO PER GENERAR LA PEÇA ALETORIAMENT
-function nuevaPieza(){
+function NovaPeca(){
         ColumnP = 5; //COLUMNA ON LA PEÇA ES COLOCARA PER COMENÇAR
         FilaP = 0;
         RotacioP = 0; 
@@ -135,18 +149,36 @@ function Dibuijar (){
 
 //NO FUNCIO ALGUNA COSAS FALTA ARREGLAR 
 //FUNCIO PER BAIXAR LA PEÇA 
-//function BaixarPeca (){
-       // FilaP = FilaP + 1;
-      //  if (ColisioPeca()){
-       // FilaP = FilaP - 1;
-       // for (i = 1; i < 5; i++){
- //var Pos2 = RotacioPeca (pos[]);
-       //if (pos [0] FilaP >= 0 && Pos2 [0] + FilaP < 25 && 0.Buffer
-                //pos [1] ColumnP >= 0 && Pos2 [1] + ColumnP < 10){
-           // Tauler [Pos2[0] + FilaP] [Pos2 [1] + ColumnP] = Pecaa + 1;
-   // }
-   // }
-  //  }
+function BaixarPeca(){
+        FilaP = FilaP + 1;
+        if (ColisioPeca()){
+            FilaP = FilaP - 1;
+            for (i = 1;i < 5; i++){
+                Mur =  peces [Pecaa][i];
+                var Pos2=rotarCasilla(pos[Mur]);
+                if (Pos2 [ 0 ] + FilaP >= 0 && Pos2 [ 0 ] + FilaP < 25 &&
+                    Pos2 [ 1 ] +ColumnP >=0 && Pos2 [ 1 ] + ColumnP < 10){
+                    Tauler [Pos2 [ 0 ] + FilaP][Pos2 [ 1 ] + ColumnP]= Pecaa + 1;
+                }
+            }
+            // SI EN LA POS 0 TENIM UNA PEÇA REINICIA EL TETRIS
+            Lineas();
+            var reinici=0;
+            for (var c=0;c < 9;c++){
+                if (Tauler [ 0 ] [ c ] !=0){
+                    reinici=1;
+                }
+            }
+            if (reinici == 1) {
+                if (ComL > TOP) {
+                    TOP = ComL;
+                }
+                GenerarTauler();
+            } else {
+                GenerarTauler();
+        }
+    }
+}
     
 
 //FUNCIO PER COMPROBAR SI LA PEÇA COLISIONA AMB EL LIMITS DEL MAPA O AMB UNA ALTRE PEÇA 
@@ -185,16 +217,58 @@ function PosNo (X, Y){
 
 //FUNCIO PER DETECTAR I CONTAR LES LINEAS FETAS
 function Lineas(){
-    
+    for (var X = 0; X < 25; X++){
+        var contador  = 0;
+            for (var Y = 0; Y < 10; Y++){
+                if (Tauler [X][Y] > 0){
+                    contador ++;
+                }
+            }
+            if (contador == 10){
+                for (var X2 = X; X2 > 0; X2--){
+                    for (var Y2 = 0; Y2 < 10; Y2 ++){
+                        Tauler [X2][Y2] = Tauler [X2-1][Y2];
+                }
+            }
+            ComL++;
+        }
+    }
 }
 
 //FUNCIA PER UTILIZAR EL TECLAT
-function Teclat (){
-    
+// CODI DE LES TECLES:
+// F.ESQUERRA   - 37
+// F.ADALT      - 38
+// F.DRETA      - 39
+// F.ABAIX      - 40
+
+function Teclat (e){
+    var Tecla = (e && e.which)? e.which: e.keyCode;
+    switch (Tecla) {
+        case 37:
+            MourePecaLateral (-1);
+            break;
+        
+        case 38:
+            RotacioPeca();
+            break;
+        
+        case 39:
+            MourePecaLateral (1);
+            break;
+        
+        case 40:
+            //BaixarPeca();
+            //break;
+    }
+    Dibuixar();
 }
       
     </script>
     <body onload='Tetris()' onkeydown = "TECLAT(event)"> 
+    
+        <div id='Mapa'/>
+    
     </body>
 </html>
 
